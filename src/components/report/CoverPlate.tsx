@@ -17,26 +17,14 @@ const gutter =
  * The page is a broken grid rather than a stack of centred blocks. Everything is paper.
  * The head is ink type on paper with one hairline under it, the title runs flush left at
  * close to viewport-filling size, and the placements table is pushed into the right two
- * thirds and down to the foot. A vertical hairline drops out of the head, between the
- * institution line and the course code, and stops dead where the title block stops; the
- * title crosses it, which is the one place the grid is allowed to break. The mono kicker
- * is set vertically up the left margin. The tall empty column under the title is the
- * composition, not a gap: the vertical rule and the kicker hold its two edges.
- *
- * The vertical rule lives in a relative wrapper that spans only the head and the title,
- * so it terminates with the title at any viewport height and can never reach the table.
+ * thirds and down to the foot. The mono kicker is set vertically up the left margin. The
+ * tall empty column under the title is the composition, not a gap: the kicker holds its
+ * left edge and the table anchors its foot.
  */
 export function CoverPlate({ onBegin }: CoverPlateProps) {
   return (
     <section aria-label="Title page" className="flex min-h-[100dvh] flex-col bg-paper pt-8 sm:pt-10">
-      <div className={`relative mx-auto w-full max-w-6xl ${gutter}`}>
-        {/* Suppressed below sm: the institution line wraps to two lines on a phone and the
-            rule would land on top of it. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-4 bottom-0 left-[74%] hidden w-px bg-rule sm:block"
-        />
-
+      <div className={`mx-auto w-full max-w-6xl ${gutter}`}>
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b border-ink pb-3">
           <p className="font-sans text-[0.8125rem] font-medium text-ink">
             {report.institution}
