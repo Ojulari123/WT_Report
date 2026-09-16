@@ -142,7 +142,13 @@ interface PlateProps {
   className?: string
 }
 
-/* ── Photographic plate ─────────────────────────────────────────────────────
+/* ── Employer mark plate ────────────────────────────────────────────────────
+   The plates are brand marks, not photographs, so the image is contained and
+   centred rather than cropped to fill: object-cover would cut the ends off a wide
+   wordmark. The inner field carries the same paper colour the four canvases were
+   normalised onto, so the padding around a mark and the canvas behind it are one
+   surface rather than two shades meeting at an edge.
+
    sizes tracks the real column: the plate sits in the 19rem sidebar at lg and
    spans the content measure below it. Nothing here is marked priority, because the
    largest contentful paint is the cover title, which is type; preloading a plate that
@@ -151,14 +157,16 @@ export function Plate({ src, alt, caption, ref_, className = '' }: PlateProps) {
   return (
     <figure className={className}>
       <div className="border border-rule bg-plate p-1.5">
-        <Image
-          src={src}
-          alt={alt}
-          placeholder="blur"
-          loading="lazy"
-          sizes="(min-width: 1024px) 290px, (min-width: 640px) calc(100vw - 94px), calc(100vw - 62px)"
-          className="plate-img block aspect-[4/3] w-full object-cover"
-        />
+        <div className="flex aspect-[4/3] items-center justify-center bg-paper p-4 sm:p-5">
+          <Image
+            src={src}
+            alt={alt}
+            placeholder="blur"
+            loading="lazy"
+            sizes="(min-width: 1024px) 290px, (min-width: 640px) calc(100vw - 94px), calc(100vw - 62px)"
+            className="block h-full w-full object-contain"
+          />
+        </div>
       </div>
       <figcaption className="mt-2.5 flex gap-2.5 font-sans text-[0.75rem] leading-relaxed text-ink-3">
         <span className="shrink-0 font-mono font-medium text-ink-2">{ref_}</span>

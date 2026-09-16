@@ -119,10 +119,6 @@
     transform-origin: left center;
   }
 
-  .plate-img {
-    filter: saturate(0.82) contrast(1.04);
-  }
-
   .term-swap {
     animation: wtr-term-swap 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
   }

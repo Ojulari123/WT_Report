@@ -98,7 +98,7 @@ export function Chronology({ terms, activeId, onSelect }: ChronologyProps) {
               placeholder="blur"
               loading="lazy"
               sizes="(min-width: 1024px) 250px, (min-width: 640px) calc((100vw - 162px) / 2), calc(100vw - 82px)"
-              className={cn('plate-img mt-3 block aspect-[16/10] w-full border border-rule object-cover transition-opacity duration-300', on ? 'opacity-100' : 'opacity-60 group-hover:opacity-85')}
+              className={cn('mt-3 block aspect-[16/10] w-full border border-rule object-cover transition-opacity duration-300', on ? 'opacity-100' : 'opacity-60 group-hover:opacity-85')}
             />
 
             <span className={cn('mt-4 block text-[1.0625rem] font-semibold leading-snug tracking-[-0.012em] transition-colors', on ? 'text-ink' : 'text-ink-2 group-hover:text-ink')}>
