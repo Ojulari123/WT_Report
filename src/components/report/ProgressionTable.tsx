@@ -1,9 +1,18 @@
 'use client'
 
+import type { GoalThread } from '@/content/report'
 import { terms, threads } from '@/content/report'
 import { SectionHead, StateKey, StateMark } from './DocPrimitives'
 
 const termOf = (id: string) => terms.find(t => t.id === id)
+
+/* A thread is judged on its last actual assessment. A term where the goal was not set
+   carries no verdict, so those cells are skipped instead of being read as a failure to
+   meet it. A thread that was never assessed at all is not marked open. */
+const isOpen = (thread: GoalThread) => {
+  const assessed = thread.cells.filter(cell => cell.state !== 'na')
+  return assessed.length > 0 && assessed[assessed.length - 1].state !== 'met'
+}
 
 interface ProgressionTableProps {
   onSelectTerm: (id: string) => void
@@ -20,9 +29,12 @@ export function ProgressionTable({ onSelectTerm }: ProgressionTableProps) {
       <SectionHead id="sec-5" num="5.0" title="Goal Progression Across Four Terms" sub="Each recurring goal tracked across all four placements rather than reported once per term." />
 
       <p className="measure-wide mt-7 text-[1.0625rem] leading-[1.72] text-ink">
-        Four goals recur across the four terms. One was met on the first attempt in the final term
-        only, one stayed partial for three terms before it moved, one went backwards, and one was
-        never met at all. Reading the rows across is the point of the table.
+        Four goals recur across the four terms, and no single goal was set in all four. Two of them
+        run through three terms each and were met every time they were set, with the wording asking
+        for more each time. One was met in the first term, recorded as partially met in the second,
+        and then not set again. One appears only in the last two terms, met in the third and
+        partially met in the fourth, which is where it still sits. Reading the rows across is the
+        point of the table.
       </p>
 
       <div className="mt-7 border-y border-rule py-4">
@@ -60,7 +72,7 @@ export function ProgressionTable({ onSelectTerm }: ProgressionTableProps) {
             </thead>
             <tbody>
               {threads.map(thread => {
-                const open = thread.cells[thread.cells.length - 1].state !== 'met'
+                const open = isOpen(thread)
                 return (
                   <tr key={thread.ref} className="border-b border-rule-2 align-top last:border-b-0">
                     <th scope="row" className="px-4 py-5 font-normal">
@@ -96,7 +108,7 @@ export function ProgressionTable({ onSelectTerm }: ProgressionTableProps) {
         {/* ── Same data, stacked, below the table breakpoint ─────────────── */}
         <div className="space-y-px bg-rule lg:hidden">
           {threads.map(thread => {
-            const open = thread.cells[thread.cells.length - 1].state !== 'met'
+            const open = isOpen(thread)
             return (
               <div key={thread.ref} className="bg-plate p-4">
                 <div className="flex items-baseline gap-2.5">
