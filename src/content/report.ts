@@ -301,7 +301,7 @@ export const terms: Term[] = [
     plateAlt:
       'The Raa i.T. logo. The word Raa in dark grey rounded letters, then a lower-case i in orange and a capital T in red, each followed by a full stop.',
     plateCaption:
-      'The Raa I.T. mark, taken from the contract of employment for this placement. Work Term 1 ran from May to September 2024, remote to Salford, and was hosted by Cyraatek, a sister company of the firm.',
+      "The RAA I.T. mark. The firm's offices sit at Water's Edge Business Park in Salford.",
     project: 'Customer Management and Support System',
     employer: {
       name: 'RAA I.T.',
@@ -409,7 +409,7 @@ export const terms: Term[] = [
     plateAlt:
       'The Jren Energy letterhead mark. The words Jren Energy in blue, a thin grey rule under them, and the line Value Added Services in grey below that.',
     plateCaption:
-      'The Jren Energy letterhead, taken from the offer of placement. The firm sets its own name as type rather than as a drawn logo, so this is the mark as the firm itself uses it. Work Term 2 ran from January to May 2025, remote to Calgary, with the final week on site.',
+      "The JREN Energy Inc. mark. Chilink, the firm's in-house conferencing product, carries a name apart from the company's own.",
     project: 'Chilink, the conferencing application, and the public website',
     employer: {
       name: 'JREN Energy Inc.',
@@ -513,7 +513,7 @@ export const terms: Term[] = [
     plateAlt:
       'The Badger Redwood logo. A tall pale orange redwood tree beside the words Badger Redwood, with Badger in bold navy and Redwood in a lighter navy.',
     plateCaption:
-      'The Badger Redwood mark, taken from the scanned offer letter, which is why the edges are soft. Work Term 3 ran from September to December 2025, remote to Mississauga, on a supply chain management application used by clients of the firm.',
+      'The Badger Redwood Inc. mark, with a redwood standing beside the name. Offer letters here are signed by a Partner for Supply Chain Technology Products, so the firm organises itself around product lines rather than projects.',
     project: 'Supply chain management application',
     employer: {
       name: 'Badger Redwood Inc.',
@@ -614,7 +614,7 @@ export const terms: Term[] = [
     plateAlt:
       'The Value-N-Action Consulting logo. A navy V, N and A monogram overlapping a globe, with the words VALUE-N-ACTION above the word CONSULTING beneath it.',
     plateCaption:
-      'The Value-N-Action Consulting mark, taken from the website assets the firm supplied. Work Term 4 ran from 18 May to 6 September 2026, remote to Toronto, and is the placement this report was written at the end of.',
+      'The Value-N-Action Consulting mark. Its monogram overlaps a globe, a shape that suits a practice already carried out in both English and French.',
     project: 'The company website, and an AI agent platform',
     employer: {
       name: 'Value-N-Action Consulting',
