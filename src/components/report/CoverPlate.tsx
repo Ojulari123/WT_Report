@@ -17,9 +17,13 @@ const gutter =
  * The page is a broken grid rather than a stack of centred blocks. Everything is paper.
  * The head is ink type on paper with one hairline under it, the title runs flush left at
  * close to viewport-filling size, and the placements table is pushed into the right two
- * thirds and down to the foot. The mono kicker is set vertically up the left margin. The
- * tall empty column under the title is the composition, not a gap: the kicker holds its
- * left edge and the table anchors its foot.
+ * thirds and down to the foot. From sm the mono kicker is set vertically up the left
+ * margin. The tall empty column under the title is the composition, not a gap: the kicker
+ * holds its left edge and the table anchors its foot.
+ *
+ * Below lg the left margin is held instead by a ghost numeral of the placement count,
+ * and the kicker sets horizontally under the head rule, because at 390px there is no
+ * margin for a vertical line to stand in.
  */
 export function CoverPlate({ onBegin }: CoverPlateProps) {
   return (
@@ -34,16 +38,37 @@ export function CoverPlate({ onBegin }: CoverPlateProps) {
           <p className="font-mono text-[0.75rem] tracking-[0.06em] text-ink-2">{report.course}</p>
         </div>
 
-        <h1 className="cover-title-in mt-7 text-[clamp(2.75rem,10.2vw,8rem)] font-semibold leading-[0.92] tracking-[-0.045em] text-ink sm:mt-9">
-          {report.title}
-        </h1>
+        <div className="relative">
+          {/* The ghost numeral. Four placements, set once at the scale of the page, bleeding
+              off the left edge so the reader gets a fragment rather than a graphic, at 4
+              percent ink so it cannot compete with the title. It is off at lg because the
+              wide composition is already settled.
+
+              The negative top cancels the title block's own top margin, which collapses out
+              of this wrapper, so the numeral's box starts level with the head rule at every
+              width rather than at a hand-picked offset. */}
+          <span aria-hidden="true" className="pointer-events-none absolute -left-[0.2em] -top-4 z-0 select-none font-serif text-[42vh] font-semibold leading-[0.74] tracking-[-0.06em] text-ink/[0.04] sm:-top-9 lg:hidden">
+            {terms.length}
+          </span>
+
+          {/* At small sizes the kicker sets horizontally here, under the rule. The vertical
+              setting up the left margin needs a margin to stand in, and at 390px there is
+              none once the numeral holds that edge. */}
+          <p className="relative z-10 mt-4 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-ink-3 sm:hidden">
+            {report.kind}
+          </p>
+
+          <h1 className="cover-title-in relative z-10 mt-4 text-[clamp(2.5rem,10.2vw,8rem)] font-semibold leading-[0.99] tracking-[-0.045em] text-ink sm:mt-9 sm:leading-[0.92]">
+            {report.title}
+          </h1>
+        </div>
       </div>
 
-      <div className={`relative mx-auto flex w-full max-w-6xl flex-1 flex-col ${gutter}`}>
+      <div className={`relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col ${gutter}`}>
         {/* Reads bottom to top up the left margin. Anchored at 40% of this block rather
             than to its foot, because a bottom anchor clipped the head of the line once the
             block grew. */}
-        <p className="absolute left-[calc(env(safe-area-inset-left,0px)+0.25rem)] top-[40%] rotate-180 whitespace-nowrap font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-ink-3 [writing-mode:vertical-rl] sm:text-[0.75rem] sm:tracking-[0.2em]">
+        <p className="absolute left-[calc(env(safe-area-inset-left,0px)+0.25rem)] top-[40%] hidden rotate-180 whitespace-nowrap font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-ink-3 [writing-mode:vertical-rl] sm:block sm:text-[0.75rem] sm:tracking-[0.2em]">
           {report.kind}
         </p>
 
@@ -54,7 +79,7 @@ export function CoverPlate({ onBegin }: CoverPlateProps) {
             {terms.map(t => (
               <li
                 key={t.id}
-                className="grid grid-cols-[2rem_1fr] items-baseline gap-x-4 gap-y-1 border-b border-rule-2 py-3 sm:grid-cols-[2.5rem_1fr_1fr_8.5rem] sm:gap-x-5"
+                className="grid grid-cols-[2rem_1fr] items-baseline gap-x-4 gap-y-1 border-b border-rule-2 py-3 lg:grid-cols-[2.5rem_1fr_1fr_8.5rem] lg:gap-x-5"
               >
                 <span className="font-mono text-[0.75rem] tabular-nums text-ink-3">
                   {t.ordinal}
@@ -62,10 +87,10 @@ export function CoverPlate({ onBegin }: CoverPlateProps) {
                 <span className="text-[1.0625rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
                   {t.employer.name}
                 </span>
-                <span className="col-start-2 font-sans text-[0.875rem] text-ink-2 sm:col-start-3">
+                <span className="col-start-2 font-sans text-[0.875rem] text-ink-2 lg:col-start-3">
                   {t.role}
                 </span>
-                <span className="col-start-2 font-mono text-[0.75rem] tabular-nums text-ink-3 sm:col-start-4 sm:text-right">
+                <span className="col-start-2 font-mono text-[0.75rem] tabular-nums text-ink-3 lg:col-start-4 lg:text-right">
                   {t.datesShort}
                 </span>
               </li>
