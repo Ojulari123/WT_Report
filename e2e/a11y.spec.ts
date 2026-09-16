@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
+import { chronologyTab, LATEST_TERM } from './helpers'
 
 /* vitest-axe disables every cat.color rule because jsdom never lays out, so contrast is
    otherwise asserted nowhere. This runs axe in a real renderer instead, with colour rules
@@ -15,7 +16,7 @@ test.describe('colour contrast', () => {
 
   test('has no accessibility violations against the loaded page', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('tab', { name: /Meridian Logistics/ })).toBeVisible()
+    await expect(chronologyTab(page, LATEST_TERM)).toBeVisible()
 
     const results = await new AxeBuilder({ page }).analyze()
 

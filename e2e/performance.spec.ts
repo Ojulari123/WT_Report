@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { isOwnOrigin, settleScroll } from './helpers'
+import { chronologyTab, isOwnOrigin, LATEST_TERM, settleScroll } from './helpers'
 
 /* Left at 300 KiB rather than lowered: TechMark's brand marks (cdn.simpleicons.org) are
    excluded below because this budget is this application's own asset weight, not a
@@ -141,6 +141,6 @@ test.describe('reading progress bar', () => {
         .not.toBe('')
     }
 
-    await expect(page.getByRole('tab', { name: /Meridian Logistics/ })).toBeVisible()
+    await expect(chronologyTab(page, LATEST_TERM)).toBeVisible()
   })
 })

@@ -1,12 +1,16 @@
 import { expect, test, type Page } from '@playwright/test'
 import {
+  chronologyTab,
   contentsTermRow,
+  employerHeading,
   expectLandsAtHeaderOffset,
   expectOnlySelectedTab,
   fontsReady,
   isOwnOrigin,
+  LATEST_TERM,
   scrollPastCover,
   settleScroll,
+  STUDENT_NAME,
 } from './helpers'
 
 const appendixJump = (page: Page) =>
@@ -18,8 +22,8 @@ test.describe('on load', () => {
   })
 
   test('opens on the latest work term', async ({ page }) => {
-    await expectOnlySelectedTab(page, 'wt4')
-    await expect(page.getByRole('heading', { name: 'Meridian Logistics', level: 3 })).toBeVisible()
+    await expectOnlySelectedTab(page, LATEST_TERM)
+    await expect(employerHeading(page, LATEST_TERM)).toBeVisible()
   })
 
   test('shows the ingestion figure, which belongs to the latest term', async ({ page }) => {
@@ -33,43 +37,39 @@ test.describe('term swaps', () => {
   })
 
   test('swap from a contents work term row', async ({ page }) => {
-    await contentsTermRow(page, 'City of Guelph').click()
+    await contentsTermRow(page, 'wt3').click()
 
     await expectOnlySelectedTab(page, 'wt3')
-    await expect(
-      page.getByRole('heading', { name: 'City of Guelph, Open Data Programme', level: 3 })
-    ).toBeVisible()
+    await expect(employerHeading(page, 'wt3')).toBeVisible()
   })
 
   test('swap from a chronology tile', async ({ page }) => {
-    await page.getByRole('tab', { name: /Latitude Systems/ }).click()
+    await chronologyTab(page, 'wt2').click()
 
     await expectOnlySelectedTab(page, 'wt2')
-    await expect(page.getByRole('heading', { name: 'Latitude Systems', level: 3 })).toBeVisible()
+    await expect(employerHeading(page, 'wt2')).toBeVisible()
   })
 
   test('swap from a Table 5.1 column heading', async ({ page }) => {
     await page.getByRole('table').getByRole('button', { name: /Work Term 1/ }).click()
 
     await expectOnlySelectedTab(page, 'wt1')
-    await expect(
-      page.getByRole('heading', { name: 'Northview Health Network', level: 3 })
-    ).toBeVisible()
+    await expect(employerHeading(page, 'wt1')).toBeVisible()
   })
 
   test('shows the ingestion figure only for the latest term', async ({ page }) => {
     await expect(page.locator('#figure-3-1')).toBeAttached()
 
-    await page.getByRole('tab', { name: /Northview Health Network/ }).click()
+    await chronologyTab(page, 'wt1').click()
     await expect(page.locator('#figure-3-1')).toHaveCount(0)
 
-    await page.getByRole('tab', { name: /Meridian Logistics/ }).click()
+    await chronologyTab(page, LATEST_TERM).click()
     await expect(page.locator('#figure-3-1')).toBeAttached()
   })
 
   test('brings the reader to section 2.0 of the term it loaded', async ({ page }) => {
     await fontsReady(page)
-    await contentsTermRow(page, 'Latitude Systems').click()
+    await contentsTermRow(page, 'wt2').click()
     await expectLandsAtHeaderOffset(page, 'sec-2')
   })
 })
@@ -151,7 +151,7 @@ test.describe('the fixed header', () => {
 
     /* An earlier version of this page left the header on screen after the reader
        returned to the cover, so this is the regression guard rather than a formality. */
-    const backToTop = banner.getByRole('button', { name: /Adeoluwa Ojulari/ })
+    const backToTop = banner.getByRole('button', { name: STUDENT_NAME, exact: false })
     await backToTop.click()
     await page.waitForFunction(() => window.scrollY === 0, undefined, { timeout: 300 })
 
@@ -186,7 +186,7 @@ test.describe('cleanliness', () => {
 
     await page.goto('/')
     await page.waitForLoadState('load')
-    await expect(page.getByRole('tab', { name: /Meridian Logistics/ })).toBeVisible()
+    await expect(chronologyTab(page, LATEST_TERM)).toBeVisible()
 
     /* TechMark's brand marks come from cdn.simpleicons.org, which this codebase does not
        control. A slow or unreachable CDN is reported here rather than failing the suite,
@@ -217,7 +217,7 @@ test.describe('cleanliness', () => {
 
     await page.goto('/')
     await page.waitForLoadState('load')
-    await expect(page.getByRole('tab', { name: /Meridian Logistics/ })).toBeVisible()
+    await expect(chronologyTab(page, LATEST_TERM)).toBeVisible()
 
     expect(thirdPartyFailures.length, 'the aborted CDN requests should still be observed')
       .toBeGreaterThan(0)
@@ -248,9 +248,9 @@ test.describe('cleanliness', () => {
     })
 
     await page.goto('/')
-    await expect(page.getByRole('tab', { name: /Meridian Logistics/ })).toBeVisible()
+    await expect(chronologyTab(page, LATEST_TERM)).toBeVisible()
     await scrollPastCover(page)
-    await page.getByRole('tab', { name: /Latitude Systems/ }).click()
+    await chronologyTab(page, 'wt2').click()
     await settleScroll(page)
 
     const stacks = await page.evaluate(

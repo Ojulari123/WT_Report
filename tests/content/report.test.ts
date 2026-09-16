@@ -4,7 +4,7 @@ import { contents, figures, interstitials, terms, threads } from '@/content/repo
 import { plateSrc } from '@/lib/plates'
 
 const TERM_ORDER = ['wt1', 'wt2', 'wt3', 'wt4']
-const GOAL_COUNTS = [3, 4, 4, 4]
+const GOAL_COUNTS = [3, 3, 3, 3]
 const GOAL_STATES = ['met', 'partial', 'unmet']
 
 describe('terms', () => {
@@ -13,9 +13,9 @@ describe('terms', () => {
     expect(terms.map(t => t.id)).toEqual(TERM_ORDER)
   })
 
-  it('carries the documented number of goals per term, fifteen in total', () => {
+  it('carries the documented number of goals per term, twelve in total', () => {
     expect(terms.map(t => t.goals.length)).toEqual(GOAL_COUNTS)
-    expect(terms.reduce((n, t) => n + t.goals.length, 0)).toBe(15)
+    expect(terms.reduce((n, t) => n + t.goals.length, 0)).toBe(12)
   })
 
   it('gives every goal a ref that is unique inside its own term', () => {
@@ -91,7 +91,7 @@ describe('front matter tables', () => {
    walks the exported values rather than the file text: a dash reintroduced through a
    template literal or a nested object would never show up in a source-text grep. */
 describe('dash audit', () => {
-  const DASHES = /[–—]/
+  const DASHES = /[\u2013\u2014]/
 
   const offenders: string[] = []
   const seen = new WeakSet<object>()

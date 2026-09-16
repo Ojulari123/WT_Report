@@ -3,6 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { TermSections } from '@/components/report/TermSections'
 import { interstitials, terms } from '@/content/report'
 
+/* The figure is located by one fragment of its accessible name, held here so the
+   positive and the negative case can never drift apart. */
+const FIGURE_NAME = /Work Term 4 agent platform/
+
 const termById = (id: string) => {
   const term = terms.find(t => t.id === id)
   if (!term) throw new Error(`no term ${id}`)
@@ -48,12 +52,12 @@ describe('TermSections', () => {
   it('renders the ingestion figure for the latest term', () => {
     render(<TermSections term={termById('wt4')} />)
     expect(document.getElementById('figure-3-1')).not.toBeNull()
-    expect(screen.getByRole('img', { name: /deduplication layer/ })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: FIGURE_NAME })).toBeInTheDocument()
   })
 
   it.each(['wt1', 'wt2', 'wt3'])('renders no ingestion figure for %s', id => {
     render(<TermSections term={termById(id)} />)
     expect(document.getElementById('figure-3-1')).toBeNull()
-    expect(screen.queryByRole('img', { name: /deduplication layer/ })).toBeNull()
+    expect(screen.queryByRole('img', { name: FIGURE_NAME })).toBeNull()
   })
 })

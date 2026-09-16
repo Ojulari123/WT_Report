@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { fixedHeader, scrollPastCover } from './helpers'
+import { chronologyTab, employerHeading, fixedHeader, scrollPastCover } from './helpers'
 
 test.describe('print', () => {
   test('drops the fixed header and keeps the document', async ({ page }) => {
@@ -39,10 +39,8 @@ test.describe('reduced motion', () => {
       await page.waitForTimeout(100)
     }
 
-    await page.getByRole('tab', { name: /Northview Health Network/ }).click()
-    await expect(
-      page.getByRole('heading', { name: 'Northview Health Network', level: 3 })
-    ).toBeVisible()
+    await chronologyTab(page, 'wt1').click()
+    await expect(employerHeading(page, 'wt1')).toBeVisible()
     await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(1)
   })
 })

@@ -45,7 +45,7 @@ describe('Contents', () => {
       .getAllByRole('button')
       .filter(b => b.getAttribute('aria-current') === 'true')
     expect(current).toHaveLength(1)
-    expect(current[0]).toHaveTextContent('Meridian Logistics')
+    expect(current[0]).toHaveTextContent('Value-N-Action Consulting')
   })
 
   it.each(contents.map(row => [row.title, row.anchor]))(
