@@ -101,7 +101,7 @@ export function TermSections({ term }: TermSectionsProps) {
 
         {term.isLatest && (
           <div className="mt-10">
-            <Figure id="figure-3-1" ref_="Figure 3.1" caption="Position of the deduplication layer in the ingestion path. The dashed boundary marks the scope of this work term.">
+            <Figure id="figure-3-1" ref_="Figure 3.1" caption="The agent platform built during this term. Four inbound channels reach one router, which keeps a sticky session in Postgres and dispatches to three agents. The scheduler agent, marked in accent, is seven of the ten workflows.">
               <IngestionFigure />
             </Figure>
           </div>

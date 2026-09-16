@@ -28,9 +28,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Four Work Terms in Computer Science',
+  title: 'Four Work Terms in Computing | Adeoluwa Jason Ojulari',
   description:
-    'A co-op work term portfolio reporting four placements at equal depth, tracking four recurring goals across all of them.',
+    'The co-op work term portfolio of Adeoluwa Jason Ojulari, University of Guelph. Four placements from 2024 to 2026 at RAA I.T., JREN Energy, Badger Redwood and Value-N-Action Consulting, each reported at equal depth, with four recurring goals tracked across all of them.',
 };
 
 /* viewport-fit: cover lets the fixed header and footer read env(safe-area-inset-*) instead
