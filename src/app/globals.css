@@ -119,13 +119,9 @@
     animation: wtr-term-swap 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  /* Title-page entrance. Two elements move and nothing else: the reversed band with its
-     seam hairline, then the title. The whole sequence lands at 580ms. Scoped to these two
-     class names, which only CoverPlate applies, so no other section can pick it up. */
-  .cover-band-in {
-    animation: wtr-cover-band 320ms ease-out both;
-  }
-
+  /* Title-page entrance. One element moves and nothing else: the title settles upward and
+     the rest of the page is already in place. Lands at 580ms. Scoped to a class name that
+     only CoverPlate applies, so no other section can pick it up. */
   .cover-title-in {
     animation: wtr-cover-title 380ms ease-out 200ms both;
   }
@@ -165,15 +161,6 @@
   }
 }
 
-@keyframes wtr-cover-band {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 /* Transform only, with no fade. A headline part way through an opacity ramp computes as
    mid-grey on paper, which the real-renderer axe pass in e2e/a11y.spec.ts reads as a
    contrast violation of about 1.8:1 while the animation is in flight. The title therefore
@@ -197,7 +184,6 @@
     animation: none;
   }
 
-  .cover-band-in,
   .cover-title-in {
     animation: none;
     opacity: 1;

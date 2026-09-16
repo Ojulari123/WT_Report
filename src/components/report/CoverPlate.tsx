@@ -14,47 +14,53 @@ const gutter =
  * the imagery in this document lives in the plates inside each term and in Figure 3.1,
  * and a cover carrying one placement's photograph misrepresents a portfolio of four.
  *
- * The page is two stacked plates. The head is a full-bleed ink rectangle with the
- * institution line and the kicker reversed out of it, and one seal hairline sits exactly
- * on the seam where the ink stops. Below it the title runs flush left at close to
- * viewport-filling size and the placements table is pushed into the right two thirds and
- * down to the foot, which leaves a tall empty column under the title. That column is the
- * point: the band carries the top of the page, so the white below the title reads as
- * held space rather than as a gap.
+ * The page is a broken grid rather than a stack of centred blocks. Everything is paper.
+ * The head is ink type on paper with one hairline under it, the title runs flush left at
+ * close to viewport-filling size, and the placements table is pushed into the right two
+ * thirds and down to the foot. A vertical hairline drops out of the head, between the
+ * institution line and the course code, and stops dead where the title block stops; the
+ * title crosses it, which is the one place the grid is allowed to break. The mono kicker
+ * is set vertically up the left margin. The tall empty column under the title is the
+ * composition, not a gap: the vertical rule and the kicker hold its two edges.
+ *
+ * The vertical rule lives in a relative wrapper that spans only the head and the title,
+ * so it terminates with the title at any viewport height and can never reach the table.
  */
 export function CoverPlate({ onBegin }: CoverPlateProps) {
   return (
-    <section aria-label="Title page" className="flex min-h-[100dvh] flex-col bg-paper">
-      <div className="cover-band-in w-full">
-        <div className={`w-full bg-ink pb-8 pt-8 sm:pt-10 ${gutter}`}>
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b border-paper/25 pb-3">
-              <p className="font-sans text-[0.8125rem] font-medium text-paper">
-                {report.institution}
-                <span className="mx-2 text-paper/45">/</span>
-                <span className="text-paper/75">{report.school}</span>
-              </p>
-              <p className="font-mono text-[0.75rem] tracking-[0.06em] text-paper/75">
-                {report.course}
-              </p>
-            </div>
-            <p className="mt-8 font-mono text-[0.8125rem] uppercase tracking-[0.2em] text-paper sm:text-[0.875rem]">
-              {report.kind}
-            </p>
-          </div>
+    <section aria-label="Title page" className="flex min-h-[100dvh] flex-col bg-paper pt-8 sm:pt-10">
+      <div className={`relative mx-auto w-full max-w-6xl ${gutter}`}>
+        {/* Suppressed below sm: the institution line wraps to two lines on a phone and the
+            rule would land on top of it. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-4 bottom-0 left-[74%] hidden w-px bg-rule sm:block"
+        />
+
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b border-ink pb-3">
+          <p className="font-sans text-[0.8125rem] font-medium text-ink">
+            {report.institution}
+            <span className="mx-2 text-ink-3">/</span>
+            <span className="text-ink-2">{report.school}</span>
+          </p>
+          <p className="font-mono text-[0.75rem] tracking-[0.06em] text-ink-2">{report.course}</p>
         </div>
 
-        {/* The seam. One hairline of the single accent, exactly where the ink stops. */}
-        <div aria-hidden="true" className="h-px w-full bg-seal" />
-      </div>
-
-      <div className={`mx-auto flex w-full max-w-6xl flex-1 flex-col pt-7 sm:pt-8 ${gutter}`}>
-        <h1 className="cover-title-in text-[clamp(2.75rem,10.2vw,6.5rem)] font-semibold leading-[0.92] tracking-[-0.045em] text-ink">
+        <h1 className="cover-title-in mt-7 text-[clamp(2.75rem,10.2vw,8rem)] font-semibold leading-[0.92] tracking-[-0.045em] text-ink sm:mt-9">
           {report.title}
         </h1>
+      </div>
+
+      <div className={`relative mx-auto flex w-full max-w-6xl flex-1 flex-col ${gutter}`}>
+        {/* Reads bottom to top up the left margin. Anchored at 40% of this block rather
+            than to its foot, because a bottom anchor clipped the head of the line once the
+            block grew. */}
+        <p className="absolute left-[calc(env(safe-area-inset-left,0px)+0.25rem)] top-[40%] rotate-180 whitespace-nowrap font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-ink-3 [writing-mode:vertical-rl] sm:text-[0.75rem] sm:tracking-[0.2em]">
+          {report.kind}
+        </p>
 
         {/* The four placements, as a ruled table rather than a sentence. The 3px top rule
-            gives it enough weight to answer the band. */}
+            gives it enough weight to anchor the foot of the page against the title. */}
         <div className="mt-auto w-full pt-8 sm:w-2/3 sm:self-end">
           <ol className="border-t-[3px] border-ink">
             {terms.map(t => (
