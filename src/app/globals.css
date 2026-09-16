@@ -119,6 +119,17 @@
     animation: wtr-term-swap 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Title-page entrance. Two elements move and nothing else: the reversed band with its
+     seam hairline, then the title. The whole sequence lands at 580ms. Scoped to these two
+     class names, which only CoverPlate applies, so no other section can pick it up. */
+  .cover-band-in {
+    animation: wtr-cover-band 320ms ease-out both;
+  }
+
+  .cover-title-in {
+    animation: wtr-cover-title 380ms ease-out 200ms both;
+  }
+
   /* Reading progress from the scroll timeline, so supporting engines need no listener at
      all. Engines without scroll-driven animation would leave the bar at scaleX(0) forever,
      so WorkTermReportSite attaches a passive rAF-coalesced fallback that writes the
@@ -154,6 +165,28 @@
   }
 }
 
+@keyframes wtr-cover-band {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Transform only, with no fade. A headline part way through an opacity ramp computes as
+   mid-grey on paper, which the real-renderer axe pass in e2e/a11y.spec.ts reads as a
+   contrast violation of about 1.8:1 while the animation is in flight. The title therefore
+   arrives at full ink and only settles upward. */
+@keyframes wtr-cover-title {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -162,6 +195,13 @@
   .term-swap,
   .reading-progress {
     animation: none;
+  }
+
+  .cover-band-in,
+  .cover-title-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 
   .reading-progress {
