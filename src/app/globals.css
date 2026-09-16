@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* The palette is contrast-checked against --paper. --ink-3 sits at 4.81:1, which is why it is
+   #676e77 and not the lighter grey it looks like it wants to be; do not lighten it.
+   --seal is the only accent in the document and is rationed: unmet goal state, active nav
+   underline, reading-progress bar, link hover, and one border in Figure 1. Nothing decorative. */
+:root {
+  --paper: #f7f7f5;
+  --plate: #fdfdfc;
+  --ink: #15171a;
+  --ink-2: #4a5057;
+  --ink-3: #676e77;
+  --rule: #d6d8da;
+  --rule-2: #e7e8e9;
+  --seal: #a4032a;
+  --radius: 0px;
+}
+
+/* A print-emulating document renders as paper even where a host forces dark mode. */
+.dark {
+  --paper: #f7f7f5;
+  --plate: #fdfdfc;
+  --ink: #15171a;
+  --ink-2: #4a5057;
+  --ink-3: #676e77;
+  --rule: #d6d8da;
+  --rule-2: #e7e8e9;
+  --seal: #a4032a;
+  --radius: 0px;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-plate: var(--plate);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-seal: var(--seal);
+
+  --font-serif: var(--font-plex-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Radius 0 is load-bearing. Rounded cards are the single strongest reason an earlier
+     iteration of this report read as a SaaS template rather than as a typeset document. */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
+/* Bare `rounded` is a hardcoded 0.25rem legacy utility in Tailwind v4 rather than a read of
+   the --radius-* scale, so zeroing the scale above does not reach it. Same-layer source order
+   is what overrides it; @utility loses to the built-in of the same name. */
+@layer utilities {
+  .rounded {
+    border-radius: 0;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-plex-serif), ui-serif, Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer components {
+  .measure {
+    max-width: 34rem;
+  }
+
+  .measure-wide {
+    max-width: 44rem;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .field-label {
+    font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* Contents leader. translateY pulls the dots off the baseline and onto the optical
+     centre of the line, which is where a typesetter would put them. */
+  .leader {
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    margin: 0 0.625rem;
+    border-bottom: 1px dotted var(--rule);
+    transform: translateY(-0.28em);
+  }
+
+  .letter-body > p + p {
+    text-indent: 1.5rem;
+  }
+
+  .signature {
+    font-family: var(--font-plex-serif), ui-serif, Georgia, serif;
+    font-style: italic;
+    font-size: 1.625rem;
+    line-height: 1;
+    transform: rotate(-1.4deg);
+    transform-origin: left center;
+  }
+
+  .plate-img {
+    filter: saturate(0.82) contrast(1.04);
+  }
+
+  .term-swap {
+    animation: wtr-term-swap 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Reading progress from the scroll timeline, so supporting engines need no listener at
+     all. Engines without scroll-driven animation would leave the bar at scaleX(0) forever,
+     so WorkTermReportSite attaches a passive rAF-coalesced fallback that writes the
+     transform inline. Only that one path uses a listener. */
+  .reading-progress {
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .reading-progress {
+      animation: wtr-read-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes wtr-term-swap {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes wtr-read-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .term-swap,
+  .reading-progress {
+    animation: none;
+  }
+
+  .reading-progress {
+    transform: scaleX(0);
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff;
+  }
+
+  .page-break {
+    break-before: page;
+  }
+}
