@@ -21,7 +21,7 @@ export function LetterOfSubmittal() {
 
           <p className="mt-9 text-[1.0625rem] text-ink">{letter.salutation}</p>
 
-          <div className="letter-body mt-5 space-y-4">
+          <div className="mt-5 space-y-4">
             {letter.body.map((para, i) => (
               <p key={i} className="text-[1.0625rem] leading-[1.68] text-ink">
                 {para}
