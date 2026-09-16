@@ -161,7 +161,7 @@ export interface Introduction {
 
 export const introduction: Introduction = {
   lead:
-    'I arrived at Guelph very young, took a first internship at eighteen with no real idea what I was doing, and four work terms later the systems I write run in production.',
+    'I arrived at Guelph very young, took a first internship at nineteen with no real idea what I was doing, and four work terms later the systems I write run in production.',
   body: [
     'The four terms in order: a Customer Management and Support System for RAA I.T. over the summer of 2024, maintenance and feature work on the JREN Energy public website and its Chilink conferencing application through the winter of 2025, full-stack features and tests on a supply chain management application at Badger Redwood in the autumn of 2025, and then a production website and a ten-workflow AI agent platform at Value-N-Action Consulting in the summer of 2026.',
     'The through-line is less flattering than that list. The first goal I ever set for a work term was about not being able to turn pseudocode into code. I could describe a solution accurately and then stall at writing it. The fourth-term version of the same goal is about becoming comfortable working with AI models. Three production systems sit between those two sentences, which is the only reason the goal was able to move that far.',
