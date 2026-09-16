@@ -149,10 +149,11 @@ interface PlateProps {
    normalised onto, so the padding around a mark and the canvas behind it are one
    surface rather than two shades meeting at an edge.
 
-   sizes tracks the real column: the plate sits in the 19rem sidebar at lg and
-   spans the content measure below it. Nothing here is marked priority, because the
-   largest contentful paint is the cover title, which is type; preloading a plate that
-   sits several screens down only competes with it for bandwidth. */
+   sizes tracks the real column: the plate sits in the 19rem sidebar at lg, is capped at
+   24rem between sm and lg, and spans the content measure below that. Nothing here is
+   marked priority, because the largest contentful paint is the cover title, which is
+   type; preloading a plate that sits several screens down only competes with it for
+   bandwidth. */
 export function Plate({ src, alt, caption, ref_, className = '' }: PlateProps) {
   return (
     <figure className={className}>
@@ -163,7 +164,7 @@ export function Plate({ src, alt, caption, ref_, className = '' }: PlateProps) {
             alt={alt}
             placeholder="blur"
             loading="lazy"
-            sizes="(min-width: 1024px) 290px, (min-width: 640px) calc(100vw - 94px), calc(100vw - 62px)"
+            sizes="(min-width: 1024px) 290px, (min-width: 640px) 360px, calc(100vw - 62px)"
             className="block h-full w-full object-contain"
           />
         </div>
@@ -193,12 +194,16 @@ export function Disclosure({ id, summary, meta, defaultOpen = false, children }:
 
   return (
     <div className="border-b border-rule-2 last:border-b-0">
-      <button type="button" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-controls={id} className="group flex w-full items-start gap-4 py-4 text-left transition-colors duration-200 hover:bg-plate sm:gap-6">
+      {/* The row wraps below sm. A goal title set beside a nowrap state mark is left with
+          about 190px at 390px and breaks into five short lines, so at small sizes the mark
+          takes a line of its own under the summary, indented to the summary's own left edge.
+          From sm the three parts sit on one line, as before. */}
+      <button type="button" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-controls={id} className="group flex w-full flex-wrap items-start gap-x-4 gap-y-2 py-4 text-left transition-colors duration-200 hover:bg-plate sm:flex-nowrap sm:gap-x-6">
         <span className="mt-[0.1875rem] flex h-4 w-4 shrink-0 items-center justify-center font-mono text-[0.9375rem] leading-none text-ink-3 transition-colors group-hover:text-ink">
           {open ? '−' : '+'}
         </span>
-        <span className="min-w-0 flex-1">{summary}</span>
-        {meta && <span className="shrink-0 pt-0.5">{meta}</span>}
+        <span className="min-w-0 grow basis-[calc(100%-2rem)] sm:basis-0">{summary}</span>
+        {meta && <span className="shrink-0 pl-8 sm:pl-0 sm:pt-0.5">{meta}</span>}
       </button>
       <div id={id} hidden={!open} className="pb-6 pl-8 sm:pl-10">
         {children}

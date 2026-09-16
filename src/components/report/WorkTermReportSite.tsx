@@ -161,8 +161,10 @@ export function WorkTermReportSite() {
           <nav aria-label="Report sections" className="ml-auto flex min-w-0 items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {NAV.map(item => {
               const on = activeId === item.id
+              /* py-2.5 below lg carries the nav item to a 45px tap target on a phone. At lg a
+                 pointer is doing the work and the bar keeps the height it had. */
               return (
-                <button key={item.id} type="button" onClick={() => scrollTo(item.id)} aria-current={on ? 'true' : undefined} className={cn('group shrink-0 px-2.5 py-1.5 font-sans text-[0.8125rem] transition-colors duration-200', on ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
+                <button key={item.id} type="button" onClick={() => scrollTo(item.id)} aria-current={on ? 'true' : undefined} className={cn('group shrink-0 px-2.5 py-2.5 font-sans text-[0.8125rem] transition-colors duration-200 lg:py-1.5', on ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
                   <span className="mr-1.5 font-mono text-[0.6875rem] tabular-nums text-ink-3">
                     {item.ref}
                   </span>
@@ -293,7 +295,7 @@ export function WorkTermReportSite() {
           {/* ── Appendix A ────────────────────────────────────────────── */}
           <section id="appendix-a" className="scroll-mt-24">
             <div className="flex items-baseline gap-4 border-b border-ink pb-3 sm:gap-6">
-              <span className="font-mono text-[0.8125rem] font-medium text-ink-3">App. A</span>
+              <span className="shrink-0 font-mono text-[0.8125rem] font-medium text-ink-3">App. A</span>
               <h2 className="text-[1.5rem] font-semibold leading-tight tracking-[-0.015em] text-ink sm:text-[1.875rem]">
                 {appendix.title}
               </h2>
@@ -350,7 +352,9 @@ export function WorkTermReportSite() {
                 <div className="col-span-2">
                   <dt className="field-label">Contact</dt>
                   <dd className="mt-1">
-                    <a href={`mailto:${student.email}`} className="font-sans text-[0.875rem] text-ink underline decoration-rule underline-offset-2 transition-colors hover:text-seal hover:decoration-seal">
+                    {/* The padding and its equal negative margin buy a 46px tap box around a
+                        line of 18px text without moving the line or the grid it sits in. */}
+                    <a href={`mailto:${student.email}`} className="-my-3.5 inline-block py-3.5 font-sans text-[0.875rem] text-ink underline decoration-rule underline-offset-2 transition-colors hover:text-seal hover:decoration-seal">
                       {student.email}
                     </a>
                   </dd>

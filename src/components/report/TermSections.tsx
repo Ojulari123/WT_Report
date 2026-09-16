@@ -73,7 +73,10 @@ export function TermSections({ term }: TermSectionsProps) {
           </div>
 
           <div className="space-y-7">
-            <Plate src={plateSrc[term.plate]} alt={term.plateAlt} caption={term.plateCaption} ref_={`Plate ${index + 1}`} />
+            {/* Full width on a phone, capped between sm and lg: the plate carries a brand
+                mark, and a 4:3 frame across 688px of a tablet is 516px of paper around a
+                wordmark. At lg it sits in the sidebar and needs no cap. */}
+            <Plate src={plateSrc[term.plate]} alt={term.plateAlt} caption={term.plateCaption} ref_={`Plate ${index + 1}`} className="sm:max-w-sm lg:max-w-none" />
             <dl className="divide-y divide-rule-2 border-y border-rule-2">
               {term.employer.facts.map(f => (
                 <Field key={f.label} label={f.label} className="py-3">

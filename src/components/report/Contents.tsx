@@ -25,7 +25,9 @@ export function Contents({ activeTermId, onJump, onSelectTerm }: ContentsProps) 
           <ol className="mt-1">
             {contents.map(row => (
               <li key={row.anchor} className="border-b border-rule-2">
-                <button type="button" onClick={() => onJump(row.anchor)} className="group flex w-full items-baseline py-2.5 text-left transition-colors duration-200 hover:text-seal">
+                {/* py-3 below lg puts the row over 44px for a thumb; lg keeps the tighter
+                    contents rhythm a pointer can hit. */}
+                <button type="button" onClick={() => onJump(row.anchor)} className="group flex w-full items-baseline py-3 text-left transition-colors duration-200 hover:text-seal lg:py-2.5">
                   <span className="w-16 shrink-0 font-mono text-[0.75rem] tabular-nums text-ink-3 transition-colors group-hover:text-seal">
                     {row.ref}
                   </span>

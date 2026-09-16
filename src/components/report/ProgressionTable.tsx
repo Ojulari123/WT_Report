@@ -130,7 +130,10 @@ export function ProgressionTable({ onSelectTerm }: ProgressionTableProps) {
                     return (
                       <div key={cell.termId} className="py-3">
                         <dt className="flex items-center justify-between gap-3">
-                          <button type="button" onClick={() => t && onSelectTerm(t.id)} className="font-sans text-[0.8125rem] font-medium text-ink underline decoration-rule underline-offset-2 transition-colors hover:text-seal">
+                          {/* The padding and the equal negative margin give the term link a
+                              44px tap box that reaches into the row's own padding, so the
+                              stacked table gains a thumb target and not a pixel of height. */}
+                          <button type="button" onClick={() => t && onSelectTerm(t.id)} className="-my-3 py-3 font-sans text-[0.8125rem] font-medium text-ink underline decoration-rule underline-offset-2 transition-colors hover:text-seal">
                             {t?.label}
                           </button>
                           <StateMark state={cell.state} />
