@@ -27,7 +27,18 @@ const gutter =
  */
 export function CoverPlate({ onBegin }: CoverPlateProps) {
   return (
-    <section aria-label="Title page" className="flex min-h-[100dvh] flex-col bg-paper pt-8 sm:pt-10">
+    <section aria-label="Title page" className="relative flex min-h-[100dvh] flex-col bg-paper pt-8 sm:pt-10">
+      {/* The ghost numeral. Four placements, set once at the scale of the page, bleeding
+          off the left edge so the reader gets a fragment rather than a graphic, at 4
+          percent ink so it cannot compete with the type above it. It is off at lg because
+          the wide composition is already settled.
+
+          Anchored to the foot of the section rather than the title block, so it holds the
+          bottom left corner of the page instead of fighting the title's own top margin. */}
+      <span aria-hidden="true" className="pointer-events-none absolute -left-[0.2em] bottom-0 z-0 select-none font-serif text-[42vh] font-semibold leading-[0.74] tracking-[-0.06em] text-ink/[0.04] lg:hidden">
+        {terms.length}
+      </span>
+
       <div className={`mx-auto w-full max-w-6xl ${gutter}`}>
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b border-ink pb-3">
           <p className="font-sans text-[0.8125rem] font-medium text-ink">
@@ -39,18 +50,6 @@ export function CoverPlate({ onBegin }: CoverPlateProps) {
         </div>
 
         <div className="relative">
-          {/* The ghost numeral. Four placements, set once at the scale of the page, bleeding
-              off the left edge so the reader gets a fragment rather than a graphic, at 4
-              percent ink so it cannot compete with the title. It is off at lg because the
-              wide composition is already settled.
-
-              The negative top cancels the title block's own top margin, which collapses out
-              of this wrapper, so the numeral's box starts level with the head rule at every
-              width rather than at a hand-picked offset. */}
-          <span aria-hidden="true" className="pointer-events-none absolute -left-[0.2em] -top-4 z-0 select-none font-serif text-[42vh] font-semibold leading-[0.74] tracking-[-0.06em] text-ink/[0.04] sm:-top-9 lg:hidden">
-            {terms.length}
-          </span>
-
           {/* At small sizes the kicker sets horizontally here, under the rule. The vertical
               setting up the left margin needs a margin to stand in, and at 390px there is
               none once the numeral holds that edge. */}
@@ -110,7 +109,7 @@ export function CoverPlate({ onBegin }: CoverPlateProps) {
         </div>
       </div>
 
-      <div className={`mx-auto w-full max-w-6xl pb-10 pt-6 ${gutter}`}>
+      <div className={`relative z-10 mx-auto w-full max-w-6xl pb-10 pt-6 ${gutter}`}>
         <dl className="grid grid-cols-2 gap-x-8 gap-y-6 border-t border-ink pt-6 sm:grid-cols-4">
           {[
             { k: 'Submitted by', v: [student.name, `Student ID ${student.studentId}`] },
