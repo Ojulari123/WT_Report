@@ -188,7 +188,15 @@ interface DisclosureProps {
 /* ── Disclosure ─────────────────────────────────────────────────────────
    Uses typographic plus and minus rather than an icon. No icon library is
    available in this sandbox, and hand-rolled icon paths are worse than the
-   correct typographic mark. */
+   correct typographic mark.
+
+   The panel opens and closes on a height and opacity ramp, described in
+   .disclosure-panel in globals.css. visibility is written here rather than
+   there because it is the thing that keeps a closed panel out of the
+   accessibility tree and out of the tab order, and that guarantee should not
+   depend on a stylesheet having loaded. It is what the native hidden attribute
+   used to do, which a collapsed height alone does not: a link inside a zero
+   height overflow-hidden box is still reachable by keyboard. */
 export function Disclosure({ id, summary, meta, defaultOpen = false, children }: DisclosureProps) {
   const [open, setOpen] = useState(defaultOpen)
 
@@ -205,8 +213,13 @@ export function Disclosure({ id, summary, meta, defaultOpen = false, children }:
         <span className="min-w-0 grow basis-[calc(100%-2rem)] sm:basis-0">{summary}</span>
         {meta && <span className="shrink-0 pl-8 sm:pl-0 sm:pt-0.5">{meta}</span>}
       </button>
-      <div id={id} hidden={!open} className="pb-6 pl-8 sm:pl-10">
-        {children}
+      <div id={id} className={cn('disclosure-panel', open && 'disclosure-panel-open')} style={{ visibility: open ? 'visible' : 'hidden' }}>
+        {/* Two wrappers, not one. The clipping element has to carry no vertical padding of
+            its own: padding sits outside the box min-height: 0 applies to, so a padded
+            clipper holds the collapsed row open at the height of that padding. */}
+        <div>
+          <div className="pb-6 pl-8 sm:pl-10">{children}</div>
+        </div>
       </div>
     </div>
   )

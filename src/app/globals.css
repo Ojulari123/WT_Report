@@ -119,6 +119,40 @@
     animation: wtr-term-swap 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Goal disclosure panel. The reader asked for this state change, so it is the one place
+     in the document that owes feedback, and it gets 240ms of height and opacity rather
+     than a snap. The height is a grid row interpolating 0fr to 1fr, which needs no
+     measured pixel value and animates in all three engines this project tests;
+     interpolate-size: allow-keywords with height: auto is the shorter spelling but is
+     Chromium-only, and leaving Safari and Firefox with a snap is the worse trade.
+     visibility is set inline by Disclosure and appears in the transition list here
+     because a transitioning visibility holds its visible endpoint for the whole run: the
+     close animates first and the content leaves the accessibility tree at the end. */
+  .disclosure-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 240ms ease-out,
+      opacity 240ms ease-out,
+      visibility 240ms ease-out;
+  }
+
+  /* min-height: 0 because a grid item's automatic minimum size would otherwise hold the
+     row open at the content's full height, and overflow: hidden because the content has
+     to be clipped by the row rather than spill out of it. The clipping element is a bare
+     wrapper because min-height does not reach padding: any vertical padding on it would
+     survive the collapse and leave a closed panel holding that much dead space. */
+  .disclosure-panel > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .disclosure-panel-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
   /* Title-page entrance. One element moves and nothing else: the title settles upward and
      the rest of the page is already in place. Lands at 580ms. Scoped to a class name that
      only CoverPlate applies, so no other section can pick it up. */
