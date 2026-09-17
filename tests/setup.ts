@@ -32,6 +32,11 @@ if (!window.matchMedia) {
     }) as unknown as MediaQueryList
 }
 
+/* jsdom defines window.scrollTo only to throw "not implemented", and the report now pins
+   the document to the top on mount, so the call is stubbed to a no-op rather than left to
+   print a stack trace through every render of the page. */
+window.scrollTo = (() => {}) as typeof window.scrollTo
+
 class NoopObserver {
   readonly root = null
   readonly rootMargin = ''

@@ -46,6 +46,26 @@ export function WorkTermReportSite() {
   const activeTerm = terms.find(t => t.id === activeTermId) ?? latest
 
   useEffect(() => {
+    /* A reload part way down should open the document rather than resume it, so the
+       browser's own scroll restoration is handed back and this load is pinned to the top.
+       Instantly: on a reload the reader asked to travel nowhere, so a scroll animation
+       would read as the page overriding them, and on a phone it would fight momentum.
+       A hash is an explicit request for somewhere else and is honoured instead. The
+       anchors carry scroll-mt-24, so a hash target settles under the fixed header at the
+       same offset a nav jump uses. Mount only, so neither the nav jumps nor the
+       term-swap scroll are touched afterwards. */
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual'
+
+    const fragment = window.location.hash.slice(1)
+    const target = fragment ? document.getElementById(decodeURIComponent(fragment)) : null
+    if (target) {
+      target.scrollIntoView({ block: 'start', behavior: 'instant' })
+      return
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
+
+  useEffect(() => {
     /* Recompute from element rects on each crossing rather than trusting whichever
        target happens to be intersecting: the ids sit on short section heads, so an
        intersection-only test yields an empty set and freezes on a stale value. The
