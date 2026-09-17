@@ -81,6 +81,32 @@ describe('Disclosure', () => {
     expect(panelOf(toggle)).not.toHaveClass('disclosure-panel-open')
     expect(screen.getByText('Panel body')).not.toBeVisible()
   })
+
+  /* An earlier cut of the panel left 24px of dead space under every closed goal. The
+     clipping wrapper is the box min-height: 0 and overflow: hidden apply to, and padding
+     sits outside that box, so any vertical padding on the clipper survives the collapse
+     and holds the row open at exactly that height. The collapsed height itself is measured
+     in e2e/disclosure.spec.ts, which lays out; what is held here is the two-wrapper shape
+     that makes the collapse possible, since moving the padding up one level is the edit
+     that reintroduces the leak. */
+  it('keeps vertical padding off the clipping wrapper, one level further in', () => {
+    render(
+      <Disclosure id="goal-panel" summary="Own a feature end to end">
+        <p>Panel body</p>
+      </Disclosure>
+    )
+
+    const panel = panelOf(screen.getByRole('button', { name: /Own a feature end to end/ }))
+    const clipper = panel?.firstElementChild
+    expect(panel?.children).toHaveLength(1)
+    expect(clipper?.children).toHaveLength(1)
+
+    /* pl- and pr- are left alone on purpose: horizontal padding cannot hold a collapsed
+       row open, and the indent to the summary's left edge lives on the inner wrapper. */
+    const verticalPadding = /(^|\s)-?p[bty]?-/
+    expect(clipper?.className ?? '').not.toMatch(verticalPadding)
+    expect(clipper?.firstElementChild?.className ?? '').toMatch(verticalPadding)
+  })
 })
 
 describe('TechMark', () => {
